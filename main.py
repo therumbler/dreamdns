@@ -24,7 +24,7 @@ def get_current_ip():
     """fetch the current public IP address"""
     url = "https://api.ipify.org/"
     public_ip = urlopen(url).read().decode()
-    logger.debug('public_id = %s', public_ip)
+    logger.debug('public_ip = %s', public_ip)
     return public_ip
 
 def dns_add_record(current_ip):
