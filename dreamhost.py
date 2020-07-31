@@ -32,3 +32,47 @@ def _call(cmd, **params):
         logger.error(resp_data)
     return resp_data
 
+def dns_list_records():
+    cmd = 'dns-list_records'
+    resp = _call(cmd)
+    return resp
+
+def dns_add_record(current_ip, record):
+    cmd = 'dns-add_record'
+    logger.info('creating record for %s', current_ip)
+    resp = _call(cmd, record=record, type='A', value=current_ip)
+    logger.info('attempted to create dns %r', resp)
+ 
+
+def dns_remove_record(ip, hostname):
+    cmd = 'dns-remove_record'
+    resp = _call(cmd, value=ip, type='A', record='hostname')
+
+
+def _get_dns_ip(records, hostname):
+    rec_type = 'A'
+    for record in records['data']:
+        if record['type'] != rec_type:
+            continue
+        if record['record'] == hostname:
+            return record['value']
+
+    logger.error('cannot find %s record for %s', rec_type, DREAMHOST_DNS_DOMAIN)
+
+
+ 
+def dynamic_dns(new_ip, hostname):
+    records = dns_list_records()
+    dns_ip = _get_dns_ip(records, hostname)
+    if dns_ip == new_ip:
+        logger.info('dns_ip and new_ip match %s. No need to update', new_ip)
+        return
+    if not dns_ip:
+        dns_add_record(new_ip, hostname)
+        return
+
+
+    logger.error('nothing done')
+
+
+
