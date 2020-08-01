@@ -47,6 +47,7 @@ def dns_add_record(current_ip, record):
 def dns_remove_record(ip, hostname):
     cmd = 'dns-remove_record'
     resp = _call(cmd, value=ip, type='A', record='hostname')
+    logger.info('attempted to remove dns record %r', resp)
 
 
 def _get_dns_ip(records, hostname):
@@ -65,14 +66,14 @@ def dynamic_dns(new_ip, hostname):
     records = dns_list_records()
     dns_ip = _get_dns_ip(records, hostname)
     if dns_ip == new_ip:
-        logger.info('dns_ip and new_ip match %s. No need to update', new_ip)
-        return
-    if not dns_ip:
+        message = f'dns_ip and new_ip match {new_ip}. No need to update'
+    elif not dns_ip:
         dns_add_record(new_ip, hostname)
-        return
+        message = f'dns record added {new_ip}'
+    else:
+        dns_remove_record(ip, hostname)
+        dns_add_record(new_ip, hostname)
+        message =  f'dns record updated {new_ip}'
 
-
-    logger.error('nothing done')
-
-
-
+    logger.info(message)
+    return message

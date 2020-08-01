@@ -31,8 +31,8 @@ def index():
         return 'plese add an ip'
 
     logger.info('ip = %s', ip)
-    dynamic_dns(ip, hostname)
-    return 'index'
+    resp = dynamic_dns(ip, hostname)
+    return resp
 
 
 
