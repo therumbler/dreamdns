@@ -51,7 +51,6 @@ def dynamic_dns():
 
 def main():
     logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
-
     dynamic_dns()
 
 if __name__ == '__main__':
