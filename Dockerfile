@@ -1,8 +1,13 @@
-FROM python:3.8
+FROM python:3.8.5-alpine
+RUN pip install --upgrade pip
+RUN pip3 install pipenv
 
 RUN mkdir /app
 WORKDIR /app
 
-COPY * ./
+COPY Pipfile* ./
+RUN pipenv sync
 
-ENTRYPOINT python main.py
+COPY * ./
+EXPOSE 8080
+ENTRYPOINT pipenv run gunicorn -b 0.0.0.0:8080  web:app
