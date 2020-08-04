@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dreamdns-secrets
+type: Opaque
+data:
+  dreamhost_api_key: "{{DREAMHOST_API_KEY}}"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dreamdns-deployment
+  labels:
+    app: dreamdns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dreamdns
+  template:
+    metadata:
+      labels:
+        app: dreamdns
+    spec:
+      containers:
+      - name: dreamdns
+        image: therumbler/dreamdns:latest
+        env:
+        - name: DREAMHOST_API_KEY 
+          valueFrom:
+            secretKeyRef:
+              name: dreamdns-secrets
+              key: dreamhost_api_key
+       
+        ports:
+        - containerPort: 8080
+
+---
+
