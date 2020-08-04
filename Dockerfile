@@ -10,4 +10,4 @@ RUN pipenv sync
 
 COPY * ./
 EXPOSE 8080
-ENTRYPOINT pipenv run gunicorn --reload -b 0.0.0.0:8080  web:app
+ENTRYPOINT pipenv run gunicorn -b 0.0.0.0:8080  web:app
