@@ -26,10 +26,12 @@ def index():
         return "invalid api key"
 
     if not hostname:
+        logger.error("no hostname entered")
         return "please add a hostname"
 
     if not ip:
-        return "plese add an ip"
+        logger.error("no ip entered")
+        return "please add an ip"
 
     logger.info("ip = %s", ip)
     resp = dynamic_dns(ip, hostname)
