@@ -2,10 +2,10 @@ import logging
 import os
 import sys
 
-from flask import Flask, request
+from flask import Flask, request, abort
 from dreamhost import dynamic_dns
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 DREAMHOST_API_KEY = os.environ["DREAMHOST_API_KEY"]
@@ -23,15 +23,16 @@ def index():
     ip = request.args.get("ip")
 
     if api_key != DREAMHOST_API_KEY:
-        return "invalid api key"
+        logger.error('invalid api key')
+        abort(403, "invalid api key")
 
     if not hostname:
         logger.error("no hostname entered")
-        return "please add a hostname"
+        abort(400, "missing hostname parameter")
 
     if not ip:
         logger.error("no ip entered")
-        return "please add an ip"
+        abort(400, "missing ip parameter")
 
     logger.info("ip = %s", ip)
     resp = dynamic_dns(ip, hostname)

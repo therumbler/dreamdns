@@ -71,7 +71,7 @@ def dynamic_dns(new_ip, hostname):
         dns_add_record(new_ip, hostname)
         message = f'dns record added {new_ip}'
     else:
-        dns_remove_record(ip, hostname)
+        dns_remove_record(dns_ip, hostname)
         dns_add_record(new_ip, hostname)
         message =  f'dns record updated {new_ip}'
 
