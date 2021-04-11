@@ -46,7 +46,7 @@ def dns_add_record(current_ip, record):
 
 def dns_remove_record(ip, hostname):
     cmd = 'dns-remove_record'
-    resp = _call(cmd, value=ip, type='A', record='hostname')
+    resp = _call(cmd, value=ip, type='A', record=hostname)
     logger.info('attempted to remove dns record %r', resp)
 
 
